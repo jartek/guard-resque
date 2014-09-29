@@ -10,6 +10,7 @@ module Guard
     DEFAULT_COUNT = 1
     DEFAULT_TASK_SINGLE = 'resque:work'.freeze
     DEFAULT_TASK_MULTIPLE = 'resque:workers'.freeze
+    DEFAULT_CMD = 'bundle exec rake'.freeze
 
     # Allowable options are:
     #  - :environment  e.g. 'test'
@@ -28,6 +29,7 @@ module Guard
       @options[:queue] ||= DEFAULT_QUEUE
       @options[:count] ||= DEFAULT_COUNT
       @options[:task] ||= (@options[:count].to_i == 1) ? DEFAULT_TASK_SINGLE : DEFAULT_TASK_MULTIPLE
+      @options[:cmd] ||= DEFAULT_CMD
       super
     end
 
@@ -85,7 +87,7 @@ module Guard
     private
 
     def cmd
-      command = ['bundle exec rake', @options[:task].to_s]
+      command = [@options[:cmd], @options[:task].to_s]
 
       # trace setting
       command << '--trace' if @options[:trace]
